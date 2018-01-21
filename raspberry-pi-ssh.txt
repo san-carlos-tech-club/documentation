@@ -1,1 +1,73 @@
 These are instructions for how to SSH into a raspberry pi.
+
+1. Join the raspberry pi to a wifi network as usual.  To determine it's IP address,
+which you should be able to do by hovering over the wifi icon on the top right of the screen.
+
+2. From a different computer on the same wifi network, open a terminal program.
+
+3. Type
+
+ssh pi@IP-ADDRESS
+
+where IP-ADDRESS is what you recorded above.  For example
+
+ssh pi@192.168.0.115
+
+4. Type in the password.  By defaul, the password is "raspberry"
+
+5. You should be connected to the raspberry PI now.  You may need to answer 'yes' to a prompt if its the first
+time you are connecting.
+
+6. Type the following to launch the google AIY dev prompt:
+
+/home/pi/bin/AIY-voice-kit-shell.sh
+
+7. You are now connected to the google voice kit and can run your python scripts.
+
+8. To disconnect from the Googly AIY prompt, type
+
+exit
+
+9. To disconnect from the raspberry PI after disconnecting the AIY prompt, type
+
+exit
+
+Note that if you disconnect from either prompt or if the network drops, you will lose your connection and any
+programs that were running.
+
+If you want to run a program in the "background" so that you don't need to keep the terminal connection open, use "nohup"
+
+For example, if you were running
+
+src/assistant_library_demo.py
+
+and you wanted it to run in the background, run
+
+nohup src/assistant_library_demo.py &
+
+Basically, add "nohup" to the beginning and an "&" to the end. This runs the same script in the background.
+You can then exit the prompts while letting the program continue running.  If you unplug the raspberry pi or if
+loses connectivity to the network, it will of course stop running.
+
+If you want to stop a background process from running, reconnect to the raspberry pi via SSH as shown above.
+Then find the process and kill it.  To do this, search for it by name (easily done if it is a python script)
+
+ps -ef | grep python
+
+The command above searches all running processes on the raspberry pi that are using python.  You will see something
+like below:
+
+pi        1777  1767 55 19:58 pts/1    00:00:06 python3 src/assistant_library_demo.py
+pi        1800  1767  0 19:58 pts/1    00:00:00 grep --color=auto python
+
+Note the first line shows the "assistant_library_demo.py" script, this means it is still running.  The number
+in the second column is the process number.  Use this to kill it:
+
+kill -9 1777
+
+Replace the "1777" with the actual number you got from running the ps -ef command.  If you don't see any programs
+you started in the list, then none are running in the background.
+
+
+Note that if you restart the raspberry pi without a monitor, you *may* not get the same IP address
+on the raspberry pi -- this depends on the network.  If you get a different IP address, it will be hard to reconnect.
